@@ -1,0 +1,27 @@
+{
+  "name": "mcmaster-transcript-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel serve index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Donisius/mcmaster-transcript-parser.git"
+  },
+  "author": "Donisius Wigie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Donisius/mcmaster-transcript-parser/issues"
+  },
+  "homepage": "https://github.com/Donisius/mcmaster-transcript-parser#readme",
+  "dependencies": {
+    "pdfjs-dist": "^2.7.570",
+    "regenerator-runtime": "^0.13.7"
+  },
+  "devDependencies": {
+    "parcel": "^2.0.0-beta.2"
+  }
+}
