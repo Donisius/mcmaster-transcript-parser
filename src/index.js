@@ -24,29 +24,17 @@ export class Controller {
         switch (field) {
             case "numberOfCourses":
                 this.pageData[field] = parseInt(document.getElementById("number-of-courses").value);
+                break;
             case "scale":
                 this.pageData[field] = parseInt(document.getElementById("scale").value)
+                break;
         }
     }
 
     calculateGpa() {
-        let counter = 0;
-        const includedCourses = [];
-        // Get last `n` completed courses from parsed transcript.
-        for (let i = this.pageData.semesterData.length - 1; i >= 0; i--) {
-            for (let j = this.pageData.semesterData[i].length - 1; j >= 0; j--) {
-                if (this.pageData.numberOfCourses !== null && counter >= this.pageData.numberOfCourses) {
-                    break;
-                }
-                const course = this.pageData.semesterData[i][j];
-                if (course.weightAchieved > 0 && course.weightAchieved === course.weightPossible) {
-                    includedCourses.push(course);
-                    counter++;
-                }
-            }
-        }
+        const lastNCourses = getLastNCourses(this.pageData.numberOfCourses, this.pageData.semesterData);
 
-        this.pageData.calculatedGpa  = includedCourses.reduce(
+        this.pageData.calculatedGpa  = lastNCourses.reduce(
             (totalGpa, course) => {
                 let gradeAdgustment;
                 switch (this.pageData.scale) {
@@ -56,13 +44,31 @@ export class Controller {
                     case 12:
                     default: gradeAdgustment = letterToTwelvePoint[course.grade];
                 }
-                console.log(gradeAdgustment)
                 return totalGpa += gradeAdgustment * course.weightAchieved
             }
-        , 0) / includedCourses.reduce((totalWeight, course) => totalWeight += course.weightPossible, 0);
+        , 0) / lastNCourses.reduce((totalWeight, course) => totalWeight += course.weightPossible, 0);
 
-        document.getElementById("displayed-grade").innerHTML = this.pageData.calculatedGpa;
+        document.getElementById("displayed-grade").innerHTML = "Your total GPA is " + this.pageData.calculatedGpa;
     }
+}
+
+const getLastNCourses = (n, semesters) => {
+    let counter = 0;
+    const lastNCourses = [];
+    // Get last `n` completed courses from parsed transcript.
+    for (let i = semesters.length - 1; i >= 0; i--) {
+        for (let j = semesters[i].length - 1; j >= 0; j--) {
+            if (n !== null && counter >= n) {
+                break;
+            }
+            const course = semesters[i][j];
+            if (course.weightAchieved > 0 && course.weightAchieved === course.weightPossible) {
+                lastNCourses.push(course);
+                counter++;
+            }
+        }
+    }
+    return lastNCourses;
 }
 
 const PageController = new Controller();

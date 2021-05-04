@@ -5,18 +5,23 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
 	<link rel="stylesheet" href="./index.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
 </head>
 <body>
 	<div class="wrapper">
 		<div class="content-wrapper">
-			<h1>McMaster Transcript Parser</h1>
+			<h1 id="title">McMaster Transcript Parser</h1>
 			<div class="form-item">
 				<label for="uploader">Upload your McMaster transcript below:</label>
 				<input type="file" id="uploader" accept="application/pdf" onchange="PageController.parseFile()" />
 			</div>
 			<div class="form-item">
 				<label for="number-of-courses">Choose the last n number of courses you want to include:</label>
-				<input id="number-of-courses" type="number" onchange="PageController.updatePageData('numberOfCourses')" />
+				<input
+					id="number-of-courses"
+					type="number"
+					min="1"
+					onchange="PageController.updatePageData('numberOfCourses')" />
 			</div>
 			<div
 				class="form-item"

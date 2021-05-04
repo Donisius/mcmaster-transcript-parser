@@ -4,16 +4,27 @@
     justify-content: center;
 }
 
+#title {
+    font-size: 3em;
+    color: 	#550022;
+    margin-bottom: 0.7rem;
+}
+
 .form-item {
     display:flex;
     flex-direction: column;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
 }
 
 .form-item > :first-child {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
-#number-of-courses {
+#number-of-courses, #scale {
     width: 30%;
+}
+
+#displayed-grade {
+    margin-top: 1rem;
+    font-size: 2rem;
 }
