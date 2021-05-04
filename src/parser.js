@@ -15,46 +15,42 @@ const letterGradeRegex = /COM|[A-F][+-]?/;
 /**
  * Parses McMaster pdf transcript for course information for each semester.
  * Returns a Promise that resolves to an array of ojects representing each semester.
- * Each semester object contains the `coursesWithGrades` key which contains an array
- * of ojects representing information about all the courses taken in that semester.
+ * Each semester is an array of ojects representing information about all the courses taken
+ * in that semester.
  * 
  * For example, a possible output can be:
  * 
  * [
- * 		{
- * 			coursesWithGrades: [
- * 				{
- * 					course: "SFWRENG 3A04",
- * 					grade: 12,
- * 					weightAchived: 4,
- * 					weightPossible: 4
- * 				},
- *  			{
- * 					course: "SFWRENG 2DM3",
- * 					grade: 2,
- * 					weightAchived: 3,
- * 					weightPossible: 3
- * 				},
- * 				etc...
- * 			]	
- * 		},
- *  	{
- * 			coursesWithGrades: [
- * 				{
- * 					course: "MATLS 1M03",
- * 					grade: 1,
- * 					weightAchived: 3,
- * 					weightPossible: 3
- * 				},
- *  			{
- * 					course: "SFWRENG 3DX4",
- * 					grade: 12,
- * 					weightAchived: 4,
- * 					weightPossible: 4
- * 				},
- * 				etc...
- * 			]	
- * 		},
+ * 		[
+ * 			{
+ * 				course: "SFWRENG 3A04",
+ * 				grade: 12,
+ * 				weightAchived: 4,
+ * 				weightPossible: 4
+ * 			},
+ *  		{
+ * 				course: "SFWRENG 2DM3",
+ * 				grade: 2,
+ * 				weightAchived: 3,
+ * 				weightPossible: 3
+ * 			},
+ * 			etc...
+ * 		],
+ *  	[
+ * 			{
+ * 				course: "MATLS 1M03",
+ * 				grade: 1,
+ * 				weightAchived: 3,
+ * 				weightPossible: 3
+ * 			},
+ *  		{
+ * 				course: "SFWRENG 3DX4",
+ * 				grade: 12,
+ * 				weightAchived: 4,
+ * 				weightPossible: 4
+ * 			},
+ * 			etc...
+ * 		],
  * 		etc...
  * ]
  * 
