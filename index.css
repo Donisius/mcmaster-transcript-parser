@@ -1,0 +1,19 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-item {
+    display:flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+}
+
+.form-item > :first-child {
+    margin-bottom: 1rem;
+}
+
+#number-of-courses {
+    width: 30%;
+}

@@ -97,19 +97,17 @@ export const parse = (file) => (
 					while ((execResult = courseNameRegex.exec(semester)) !== null) {
 						courseNames.push(execResult[0]);
 					}
-					semesters.push({
-						coursesWithGrades: courseNames.map((courseName, index) => {
-							const gradeInfo = gradesInfos[index];
-							return {
-								course: courseName,
-								grade: gradeInfo && weightAchievedRegex.exec(gradeInfo)[0] === weightPossibleRegex.exec(gradeInfo)[0]
-									? letterGradeRegex.exec(gradeInfo)[0]
-									: null,
-								weightAchieved: gradeInfo ? weightAchievedRegex.exec(gradeInfo)[0] : "0.00",
-								weightPossible: gradeInfo ? weightPossibleRegex.exec(gradeInfo)[0] : "0.00"
-							}
-						})
-					});
+					semesters.push(courseNames.map((courseName, index) => {
+						const gradeInfo = gradesInfos[index];
+						return {
+							course: courseName,
+							grade: gradeInfo && weightAchievedRegex.exec(gradeInfo)[0] === weightPossibleRegex.exec(gradeInfo)[0]
+								? letterGradeRegex.exec(gradeInfo)[0]
+								: null,
+							weightAchieved: gradeInfo ? parseInt(weightAchievedRegex.exec(gradeInfo)[0]) : 0,
+							weightPossible: gradeInfo ? parseInt(weightPossibleRegex.exec(gradeInfo)[0]) : 0
+						}
+					}));
 				});
 				resolve(semesters);
 			} catch(error) {
