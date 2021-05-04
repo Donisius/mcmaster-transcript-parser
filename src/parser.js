@@ -82,7 +82,7 @@ export const parse = (file) => (
 				semestersTexts.shift();
 				// This section extracts information for each semester.
 				const semesters = [];
-				semestersTexts.forEach((semester) => {
+				semestersTexts.forEach((semester, semesterNumber) => {
 					const gradesInfos = [];
 					const courseNames = [];
 			
@@ -101,7 +101,8 @@ export const parse = (file) => (
 								? letterGradeRegex.exec(gradeInfo)[0]
 								: null,
 							weightAchieved: gradeInfo ? parseInt(weightAchievedRegex.exec(gradeInfo)[0]) : 0,
-							weightPossible: gradeInfo ? parseInt(weightPossibleRegex.exec(gradeInfo)[0]) : 0
+							weightPossible: gradeInfo ? parseInt(weightPossibleRegex.exec(gradeInfo)[0]) : 0,
+							semesterNumber: semesterNumber + 1
 						}
 					}));
 				});

@@ -3,7 +3,22 @@ import {
     letterToTwelvePoint,
     letterToFourPoint
 } from "./grades-map";
+import "@carbon/charts/styles.css";
+import { SimpleBarChart, StackedBarChart } from "@carbon/charts";
 
+const options = {
+	title: "Averages per semester",
+	axes: {
+		left: {
+			mapsTo: "value"
+		},
+		bottom: {
+			mapsTo: "group",
+			scaleType: "labels"
+		}
+	},
+	height: "400px"
+};
 export class Controller {
     constructor() {
         this.pageData = {
@@ -34,21 +49,22 @@ export class Controller {
     calculateGpa() {
         const lastNCourses = getLastNCourses(this.pageData.numberOfCourses, this.pageData.semesterData);
 
+        let gradeMap;
+        switch (this.pageData.scale) {
+            case 4:
+                gradeMap = letterToFourPoint;
+                break;
+            case 12:
+            default: gradeMap = letterToTwelvePoint;
+        }
+
         this.pageData.calculatedGpa  = lastNCourses.reduce(
-            (totalGpa, course) => {
-                let gradeAdgustment;
-                switch (this.pageData.scale) {
-                    case 4:
-                        gradeAdgustment = letterToFourPoint[course.grade];
-                        break;
-                    case 12:
-                    default: gradeAdgustment = letterToTwelvePoint[course.grade];
-                }
-                return totalGpa += gradeAdgustment * course.weightAchieved
-            }
+            (totalGpa, course) => totalGpa += gradeMap[course.grade] * course.weightAchieved
         , 0) / lastNCourses.reduce((totalWeight, course) => totalWeight += course.weightPossible, 0);
 
         document.getElementById("displayed-grade").innerHTML = "Your total GPA is " + this.pageData.calculatedGpa;
+        generateAveragesPerSemesterChart(this.pageData.semesterData, gradeMap);
+        generateIndividualCourseGradesChart(lastNCourses, gradeMap);
     }
 }
 
@@ -69,6 +85,59 @@ const getLastNCourses = (n, semesters) => {
         }
     }
     return lastNCourses;
+}
+
+const generateAveragesPerSemesterChart = (semesters, gradeMap) => {
+    const chartAnchor = document.getElementById("average-per-semester");
+    chartAnchor.innerHTML = null;
+    const data = semesters
+        .map((semester, index) => {
+            semester = semester
+                .filter((course) => course.weightAchieved > 0 && course.weightAchieved === course.weightPossible)
+            const totalGpa = semester
+                .reduce((totalGpa, course) => totalGpa += gradeMap[course.grade] * course.weightAchieved, 0);
+
+            const totalWeight = semester.reduce((totalWeight, course) => totalWeight += course.weightPossible, 0);
+
+            return {
+                group: `Semester ${index + 1}`,
+                value: totalGpa / totalWeight
+            }
+        })
+        .filter((datapoint) => datapoint.value > 0)
+
+    new SimpleBarChart(chartAnchor, {
+        data,
+        options
+    });
+}
+
+const generateIndividualCourseGradesChart = (lastNCourses, gradeMap) => {
+    const chartAnchor = document.getElementById("individual-course-grades");
+    chartAnchor.innerHTML = null;
+    const data = lastNCourses.map(({course, grade, semesterNumber}) => ({
+        group: `Semester ${semesterNumber}`,
+        key: course,
+        value: gradeMap[grade]
+    })).reverse();
+
+    new StackedBarChart(chartAnchor, {
+        data,
+        options: {
+            ...options,
+            title: "Individual course grades",
+            axes: {
+                left: {
+                    ...options.axes.left,
+                    stacked: true
+                },
+                bottom: {
+                    ...options.axes.bottom,
+                    mapsTo: "key"
+                },
+            }
+        }
+    });
 }
 
 const PageController = new Controller();
